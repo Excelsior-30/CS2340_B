@@ -40,17 +40,13 @@
 
         function searchRestaurants() {
             const locationInput = document.getElementById("location-input").value || 'atlanta';
-            const restaurantInput = document.getElementById("restaurant-input").value || 'restaurant'; 
-            const maxDistance = parseFloat(document.getElementById("distance-filter").value) * 1609.344 || 5000; 
+            const restaurantInput = document.getElementById("restaurant-input").value || 'restaurant';
+            const maxDistance = parseFloat(document.getElementById("distance-filter").value) * 1609.344 || 5000;
             let minRating = parseFloat(document.getElementById("rating-filter").value) || 0.0;
-            if (minRating[2] > 5) {
-                minRating = minRating - .5;
-                minRating++;
-            }
             if (minRating > 5) {
                 minRating = 5;
             }
-            
+
             geocoder.geocode({ 'address': locationInput }, (results, status) => {
                 if (status === google.maps.GeocoderStatus.OK) {
                     const location = results[0].geometry.location;
@@ -66,15 +62,14 @@
                     service.textSearch(request, (results, status) => {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
                             clearMarkers();
-                            
+
                             const filteredResults = results
-                                .filter(result => result.rating >= minRating)
-                                .slice(0, 30);
-                            
+                                .filter(result => result.rating >= minRating);
+
                             for (let i = 0; i < filteredResults.length; i++) {
                                 createMarker(filteredResults[i]);
                             }
-                            
+
                             if (filteredResults.length > 0) {
                                 map.setCenter(location);
                                 map.setZoom(13);
@@ -109,7 +104,7 @@
             }
             markers = [];
         }
-        
+
         window.onload = initMap;
     </script>
 {% endblock %}
